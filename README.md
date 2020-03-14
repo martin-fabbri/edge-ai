@@ -1,2 +1,2 @@
-# ai-edge
+# edge-ai
 AI Edge Projects
