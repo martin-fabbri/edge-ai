@@ -22,4 +22,5 @@ docker run -p 8899:8888 jupytervino
 ```
 http://localhost:8899/
 ```
+Passcode: ```openvino```
 
