@@ -44,6 +44,8 @@ RUN conda create -n idp python==3.6.8 -y
 RUN conda config --add channels intel \
     && conda install -y -q ${INTEL_PYTHON} python=3.6.8 \
     && conda install jupyter \
+    && conda install matplotlib \
+    && conda install tensorflow \
     && conda clean --all \
     && apt-get update -qqq \
     && apt-get install -y -q g++ \

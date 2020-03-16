@@ -15,17 +15,17 @@ docker build -t jupytervino .
 
 Windows command line (cmd)
 ```commandline
-docker run -p 8899:8888 %cd%:/home/ubuntu jupytervino
+docker run -p 8899:8888 -v %cd%:/home/ubuntu jupytervino
 ```
 
 Windows PowerShell
 ```commandline
-docker run -p 8899:8888 ${PWD}:/home/ubuntu jupytervino
+docker run -p 8899:8888 -v ${PWD}:/home/ubuntu jupytervino
 ```
 
 Linux/Mac
 ```commandline
-docker run -p 8899:8888 $(pwd):/home/ubuntu jupytervino
+docker run -p 8899:8888 -v $(pwd):/home/ubuntu jupytervino
 ```
 
 ## Access Jupyter
