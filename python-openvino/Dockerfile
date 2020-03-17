@@ -43,10 +43,14 @@ ENV ACCEPT_INTEL_PYTHON_EULA=yes
 RUN conda create -n idp python==3.6.8 -y
 RUN conda config --add channels intel \
     && conda install -y -q ${INTEL_PYTHON} python=3.6.8 \
-    && conda install jupyter \
-    && conda install matplotlib \
-    && conda install tensorflow \
+    && conda install networkx \
+    && conda install defusedxml \
+    && conda install tensorflow=1.15 \
     && conda clean --all \
+    && pip install jupyter \
+    && pip install networkx \
+    && pip install defusedxml \
+    && pip install tensorflow==1.15 \
     && apt-get update -qqq \
     && apt-get install -y -q g++ \
     && apt-get autoremove
@@ -56,12 +60,17 @@ SHELL ["/bin/bash", "-c"]
 # install packages
 RUN source activate idp \
     && conda install numpy -c intel --no-update-deps \
-    && pip install jupyter \
+    && conda install jupyter \
+    && conda install matplotlib \
+    && conda install tensorflow=1.15 \
+    && conda install networkx \
+    && conda install defusedxml \
     && jupyter notebook --generate-config \
     && ipython kernel install --user --name=idp --display-name=idp
 
 # openvino
-ARG DOWNLOAD_LINK=http://registrationcenter-download.intel.com/akdlm/irc_nas/15944/l_openvino_toolkit_p_2019.3.334_online.tgz
+# ARG DOWNLOAD_LINK=http://registrationcenter-download.intel.com/akdlm/irc_nas/15944/l_openvino_toolkit_p_2019.3.334_online.tgz
+ARG DOWNLOAD_LINK=http://registrationcenter-download.intel.com/akdlm/irc_nas/16345/l_openvino_toolkit_p_2020.1.023.tgz
 ARG INSTALL_DIR=/opt/intel/openvino
 ARG TEMP_DIR=/tmp/openvino_installer
 
@@ -70,7 +79,7 @@ RUN mkdir -p $TEMP_DIR && \
     wget -c $DOWNLOAD_LINK && \
     tar xf l_openvino_toolkit*.tgz && \
     ls && \
-    cd l_openvino_toolkit_p_2019.3.334_online && \
+    cd l_openvino_toolkit_p_2020.1.023 && \
     source activate idp && \
     sed -i 's/decline/accept/g' silent.cfg && \
     ./install.sh -s silent.cfg && \
@@ -79,8 +88,7 @@ RUN mkdir -p $TEMP_DIR && \
 # build Inference Engine samples
 RUN source activate idp \
     && $INSTALL_DIR/install_dependencies/install_openvino_dependencies.sh \
-    && mkdir $INSTALL_DIR/deployment_tools/inference_engine/samples/build && cd $INSTALL_DIR/deployment_tools/inference_engine/samples/build && \
-    /bin/bash -c "source $INSTALL_DIR/bin/setupvars.sh && cmake .. && make -j1"
+    && $INSTALL_DIR/deployment_tools/model_optimizer/install_prerequisites/install_prerequisites.sh tf
 
 RUN echo "alias openvino='source /opt/intel/openvino/bin/setupvars.sh'" >> ~/.bashrc
 
