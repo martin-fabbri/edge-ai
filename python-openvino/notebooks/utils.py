@@ -12,7 +12,7 @@ def parse_od_output(data: dict) -> dict:
     """
     predictions = []
     
-    # data['detection_boxes'] contains one array for one inferenced image
+    # video['detection_boxes'] contains one array for one inferenced image
     # lenght of this array is number of batchs 
     num_batches = len(data['detection_boxes'])
     
@@ -33,7 +33,7 @@ def parse_od_output(data: dict) -> dict:
         
         # Iterate by found objects
         for i in range(num_detections):
-            # Create array from data for the object
+            # Create array from video for the object
             obj = [
                 b, detection_classes[i], detection_scores[i],
                 detection_boxes[i][1], detection_boxes[i][0],
@@ -87,7 +87,7 @@ def draw_image(original_image: str,
 def show_performance(performance_data: dict):
     """
     Takes dictionary contains name of configurations as keys and FPS for it as values
-    Plots bar chart with data
+    Plots bar chart with video
     """
     l = numpy.arange(len(performance_data))
     
